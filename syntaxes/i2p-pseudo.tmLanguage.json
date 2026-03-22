@@ -61,6 +61,32 @@
       ]
     },
 
+    "expression-patterns": {
+      "patterns": [
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#placeholders"
+        },
+        {
+          "include": "#boolean-literal"
+        },
+        {
+          "include": "#numeric-literal"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#delimiters"
+        },
+        {
+          "include": "#identifiers"
+        }
+      ]
+    },
+
     "program-terminators": {
       "patterns": [
         {
@@ -94,21 +120,29 @@
       "patterns": [
         {
           "name": "meta.input.statement.pseudocode",
-          "match": "^\\s*(GET)\\s+([A-Za-z_][A-Za-z0-9_]*)(?:\\s+(FROM)\\s+(.+?))?\\s*$",
-          "captures": {
+          "begin": "^\\s*(GET)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "beginCaptures": {
             "1": {
               "name": "keyword.control.io.pseudocode"
             },
             "2": {
               "name": "variable.other.readwrite.pseudocode"
-            },
-            "3": {
-              "name": "keyword.control.io.pseudocode"
-            },
-            "4": {
-              "name": "meta.input.source.pseudocode"
             }
-          }
+          },
+          "end": "\\s*$",
+          "patterns": [
+            {
+              "match": "\\b(FROM)\\b",
+              "captures": {
+                "1": {
+                  "name": "keyword.control.io.pseudocode"
+                }
+              }
+            },
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         }
       ]
     },
@@ -135,25 +169,7 @@
               }
             },
             {
-              "include": "#strings"
-            },
-            {
-              "include": "#placeholders"
-            },
-            {
-              "include": "#boolean-literal"
-            },
-            {
-              "include": "#numeric-literal"
-            },
-            {
-              "include": "#operators"
-            },
-            {
-              "include": "#delimiters"
-            },
-            {
-              "include": "#identifiers"
+              "include": "#expression-patterns"
             }
           ]
         }
@@ -180,25 +196,7 @@
           "contentName": "meta.assignment.expression.pseudocode",
           "patterns": [
             {
-              "include": "#strings"
-            },
-            {
-              "include": "#placeholders"
-            },
-            {
-              "include": "#boolean-literal"
-            },
-            {
-              "include": "#numeric-literal"
-            },
-            {
-              "include": "#operators"
-            },
-            {
-              "include": "#delimiters"
-            },
-            {
-              "include": "#identifiers"
+              "include": "#expression-patterns"
             }
           ]
         }
@@ -233,25 +231,7 @@
               "match": ","
             },
             {
-              "include": "#strings"
-            },
-            {
-              "include": "#placeholders"
-            },
-            {
-              "include": "#boolean-literal"
-            },
-            {
-              "include": "#numeric-literal"
-            },
-            {
-              "include": "#operators"
-            },
-            {
-              "include": "#delimiters"
-            },
-            {
-              "include": "#identifiers"
+              "include": "#expression-patterns"
             }
           ]
         },
@@ -274,27 +254,35 @@
       "patterns": [
         {
           "name": "meta.conditional.if.pseudocode",
-          "match": "^\\s*(IF)\\s+(.+?)\\s*$",
-          "captures": {
+          "begin": "^\\s*(IF)\\b",
+          "beginCaptures": {
             "1": {
               "name": "keyword.control.conditional.pseudocode"
-            },
-            "2": {
-              "name": "meta.condition.expression.pseudocode"
             }
-          }
+          },
+          "end": "\\s*$",
+          "contentName": "meta.condition.expression.pseudocode",
+          "patterns": [
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         },
         {
           "name": "meta.conditional.elseif.pseudocode",
-          "match": "^\\s*(ELSEIF)\\s+(.+?)\\s*$",
-          "captures": {
+          "begin": "^\\s*(ELSEIF)\\b",
+          "beginCaptures": {
             "1": {
               "name": "keyword.control.conditional.pseudocode"
-            },
-            "2": {
-              "name": "meta.condition.expression.pseudocode"
             }
-          }
+          },
+          "end": "\\s*$",
+          "contentName": "meta.condition.expression.pseudocode",
+          "patterns": [
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         },
         {
           "name": "meta.conditional.else.pseudocode",
@@ -321,33 +309,45 @@
       "patterns": [
         {
           "name": "meta.loop.while.pseudocode",
-          "match": "^\\s*(WHILE)\\s+(.+?)(?:\\s+(DO))?\\s*$",
-          "captures": {
+          "begin": "^\\s*(WHILE)\\b",
+          "beginCaptures": {
             "1": {
               "name": "keyword.control.loop.pseudocode"
-            },
-            "2": {
-              "name": "meta.condition.expression.pseudocode"
-            },
-            "3": {
-              "name": "keyword.control.loop.pseudocode"
             }
-          }
+          },
+          "end": "\\s*$",
+          "patterns": [
+            {
+              "match": "\\b(DO)\\b",
+              "captures": {
+                "1": {
+                  "name": "keyword.control.loop.pseudocode"
+                }
+              }
+            },
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         },
         {
           "name": "meta.loop.do-while.pseudocode",
-          "match": "^\\s*(DO)\\s*(?:\\.\\.\\.\\s*)?(WHILE)\\s+(.+?)\\s*$",
-          "captures": {
+          "begin": "^\\s*(DO)\\s*(?:\\.\\.\\.\\s*)?(WHILE)\\b",
+          "beginCaptures": {
             "1": {
               "name": "keyword.control.loop.pseudocode"
             },
             "2": {
               "name": "keyword.control.loop.pseudocode"
-            },
-            "3": {
-              "name": "meta.condition.expression.pseudocode"
             }
-          }
+          },
+          "end": "\\s*$",
+          "contentName": "meta.condition.expression.pseudocode",
+          "patterns": [
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         },
         {
           "name": "meta.loop.do.pseudocode",
@@ -369,8 +369,8 @@
         },
         {
           "name": "meta.loop.for.pseudocode",
-          "match": "^\\s*(FOR)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(=)\\s*(.+?)\\s+(TO)\\s+(.+?)(?:\\s+(STEP)\\s+(.+?))?\\s*$",
-          "captures": {
+          "begin": "^\\s*(FOR)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(=)",
+          "beginCaptures": {
             "1": {
               "name": "keyword.control.loop.pseudocode"
             },
@@ -379,28 +379,27 @@
             },
             "3": {
               "name": "keyword.operator.assignment.pseudocode"
-            },
-            "4": {
-              "name": "meta.loop.range.start.pseudocode"
-            },
-            "5": {
-              "name": "keyword.control.loop.pseudocode"
-            },
-            "6": {
-              "name": "meta.loop.range.end.pseudocode"
-            },
-            "7": {
-              "name": "keyword.control.loop.pseudocode"
-            },
-            "8": {
-              "name": "meta.loop.range.step.pseudocode"
             }
-          }
+          },
+          "end": "\\s*$",
+          "patterns": [
+            {
+              "match": "\\b(TO|STEP)\\b",
+              "captures": {
+                "1": {
+                  "name": "keyword.control.loop.pseudocode"
+                }
+              }
+            },
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         },
         {
           "name": "meta.loop.foreach.pseudocode",
-          "match": "^\\s*(FOREACH)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s+(IN)\\s+(.+?)\\s*$",
-          "captures": {
+          "begin": "^\\s*(FOREACH)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s+(IN)\\b",
+          "beginCaptures": {
             "1": {
               "name": "keyword.control.loop.pseudocode"
             },
@@ -409,11 +408,15 @@
             },
             "3": {
               "name": "keyword.control.loop.pseudocode"
-            },
-            "4": {
-              "name": "meta.loop.collection.pseudocode"
             }
-          }
+          },
+          "end": "\\s*$",
+          "contentName": "meta.loop.collection.pseudocode",
+          "patterns": [
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         },
         {
           "name": "meta.loop.endfor.pseudocode",
@@ -430,7 +433,7 @@
     "standalone-keywords": {
       "patterns": [
         {
-          "name": "keyword.operator.logical.pseudocode",
+          "name": "keyword.operator.logical",
           "match": "\\b(?:AND|OR|NOT)\\b"
         },
         {
