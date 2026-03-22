@@ -1,0 +1,490 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/refs/heads/master/tmlanguage.json",
+  "name": "Pseudocode",
+  "scopeName": "source.pseudo",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#statements"
+    },
+    {
+      "include": "#boolean-literal"
+    },
+    {
+      "include": "#numeric-literal"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#identifiers"
+    }
+  ],
+  "repository": {
+    "statements": {
+      "patterns": [
+        {
+          "include": "#program-terminators"
+        },
+        {
+          "include": "#input-statements"
+        },
+        {
+          "include": "#output-statements"
+        },
+        {
+          "include": "#assignment-statements"
+        },
+        {
+          "include": "#call-statements"
+        },
+        {
+          "include": "#conditional-statements"
+        },
+        {
+          "include": "#loop-statements"
+        },
+        {
+          "include": "#standalone-keywords"
+        }
+      ]
+    },
+
+    "program-terminators": {
+      "patterns": [
+        {
+          "name": "meta.program.start.pseudocode",
+          "match": "^\\s*(START)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.terminator.pseudocode"
+            },
+            "2": {
+              "name": "entity.name.function.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.program.end.pseudocode",
+          "match": "^\\s*(END)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.terminator.pseudocode"
+            },
+            "2": {
+              "name": "entity.name.function.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "input-statements": {
+      "patterns": [
+        {
+          "name": "meta.input.statement.pseudocode",
+          "match": "^\\s*(GET)\\s+([A-Za-z_][A-Za-z0-9_]*)(?:\\s+(FROM)\\s+(.+?))?\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.io.pseudocode"
+            },
+            "2": {
+              "name": "variable.other.readwrite.pseudocode"
+            },
+            "3": {
+              "name": "keyword.control.io.pseudocode"
+            },
+            "4": {
+              "name": "meta.input.source.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "output-statements": {
+      "patterns": [
+        {
+          "name": "meta.output.statement.pseudocode",
+          "match": "^\\s*(PUT)\\s+(.+?)(?:\\s+(TO)\\s+(.+?))?\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.io.pseudocode"
+            },
+            "2": {
+              "name": "meta.output.expression.pseudocode"
+            },
+            "3": {
+              "name": "keyword.control.io.pseudocode"
+            },
+            "4": {
+              "name": "meta.output.destination.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "assignment-statements": {
+      "patterns": [
+        {
+          "name": "meta.assignment.statement.pseudocode",
+          "match": "^\\s*(LET)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(=)\\s*(.+?)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.assignment.pseudocode"
+            },
+            "2": {
+              "name": "variable.other.assignment.pseudocode"
+            },
+            "3": {
+              "name": "keyword.operator.assignment.pseudocode"
+            },
+            "4": {
+              "name": "meta.assignment.expression.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "call-statements": {
+      "patterns": [
+        {
+          "name": "meta.call.statement.pseudocode",
+          "begin": "^\\s*(CALL)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.call.pseudocode"
+            },
+            "2": {
+              "name": "entity.name.function.pseudocode"
+            },
+            "3": {
+              "name": "punctuation.section.group.begin.pseudocode"
+            }
+          },
+          "end": "(\\))\\s*$",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.section.group.end.pseudocode"
+            }
+          },
+          "patterns": [
+            {
+              "name": "punctuation.separator.arguments.pseudocode",
+              "match": ","
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "include": "#boolean-literal"
+            },
+            {
+              "include": "#numeric-literal"
+            },
+            {
+              "include": "#operators"
+            },
+            {
+              "include": "#identifiers"
+            }
+          ]
+        },
+        {
+          "name": "meta.call.statement.noargs.pseudocode",
+          "match": "^\\s*(CALL)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.call.pseudocode"
+            },
+            "2": {
+              "name": "entity.name.function.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "conditional-statements": {
+      "patterns": [
+        {
+          "name": "meta.conditional.if.pseudocode",
+          "match": "^\\s*(IF)\\s+(.+?)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.conditional.pseudocode"
+            },
+            "2": {
+              "name": "meta.condition.expression.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.conditional.elseif.pseudocode",
+          "match": "^\\s*(ELSEIF)\\s+(.+?)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.conditional.pseudocode"
+            },
+            "2": {
+              "name": "meta.condition.expression.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.conditional.else.pseudocode",
+          "match": "^\\s*(ELSE)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.conditional.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.conditional.endif.pseudocode",
+          "match": "^\\s*(ENDIF)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.conditional.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "loop-statements": {
+      "patterns": [
+        {
+          "name": "meta.loop.while.pseudocode",
+          "match": "^\\s*(WHILE)\\s+(.+?)(?:\\s+(DO))?\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "2": {
+              "name": "meta.condition.expression.pseudocode"
+            },
+            "3": {
+              "name": "keyword.control.loop.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.loop.do-while.pseudocode",
+          "match": "^\\s*(DO)\\s*(?:\\.\\.\\.\\s*)?(WHILE)\\s+(.+?)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "2": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "3": {
+              "name": "meta.condition.expression.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.loop.do.pseudocode",
+          "match": "^\\s*(DO)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.loop.endwhile.pseudocode",
+          "match": "^\\s*(ENDWHILE)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.loop.for.pseudocode",
+          "match": "^\\s*(FOR)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(=)\\s*(.+?)\\s+(TO)\\s+(.+?)(?:\\s+(STEP)\\s+(.+?))?\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "2": {
+              "name": "variable.other.assignment.pseudocode"
+            },
+            "3": {
+              "name": "keyword.operator.assignment.pseudocode"
+            },
+            "4": {
+              "name": "meta.loop.range.start.pseudocode"
+            },
+            "5": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "6": {
+              "name": "meta.loop.range.end.pseudocode"
+            },
+            "7": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "8": {
+              "name": "meta.loop.range.step.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.loop.foreach.pseudocode",
+          "match": "^\\s*(FOREACH)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s+(IN)\\s+(.+?)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "2": {
+              "name": "variable.other.assignment.pseudocode"
+            },
+            "3": {
+              "name": "keyword.control.loop.pseudocode"
+            },
+            "4": {
+              "name": "meta.loop.collection.pseudocode"
+            }
+          }
+        },
+        {
+          "name": "meta.loop.endfor.pseudocode",
+          "match": "^\\s*(ENDFOR)\\s*$",
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "standalone-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.pseudocode",
+          "match": "\\b(?:AND|OR|NOT)\\b"
+        },
+        {
+          "name": "keyword.control.io.pseudocode",
+          "match": "\\b(?:FROM|TO)\\b"
+        },
+        {
+          "name": "keyword.control.loop.pseudocode",
+          "match": "\\b(?:STEP|IN|DO)\\b"
+        }
+      ]
+    },
+
+    "strings": {
+      "name": "string.quoted.double.pseudocode",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.pseudocode",
+          "match": "\\\\."
+        }
+      ]
+    },
+
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.pseudocode",
+          "begin": "(^[ \\t]+)?(//)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.pseudocode"
+            },
+            "2": {
+              "name": "punctuation.definition.comment.pseudocode"
+            }
+          },
+          "end": "(?=$)"
+        },
+        {
+          "name": "comment.block.pseudocode",
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.begin.pseudocode"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.end.pseudocode"
+            }
+          }
+        }
+      ]
+    },
+
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.comparison.pseudocode",
+          "match": "(<=|>=|<>|<|>)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.pseudocode",
+          "match": "(\\+|-|\\*|/)"
+        }
+      ]
+    },
+
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.pseudocode",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+        }
+      ]
+    },
+
+    "numeric-literal": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.pseudocode",
+          "match": "\\b0(x|X)[0-9a-fA-F][0-9a-fA-F_]*\\b"
+        },
+        {
+          "name": "constant.numeric.binary.pseudocode",
+          "match": "\\b0(b|B)[01][01_]*\\b"
+        },
+        {
+          "name": "constant.numeric.octal.pseudocode",
+          "match": "\\b0(o|O)?[0-7][0-7_]*\\b"
+        },
+        {
+          "name": "constant.numeric.decimal.pseudocode",
+          "match": "(?x)\\b(?:[0-9][0-9_]*\\.[0-9][0-9_]*|[0-9][0-9_]*\\.|\\.[0-9][0-9_]*|[0-9][0-9_]*)\\b"
+        }
+      ]
+    },
+
+    "boolean-literal": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.true.pseudocode",
+          "match": "\\bTRUE\\b"
+        },
+        {
+          "name": "constant.language.boolean.false.pseudocode",
+          "match": "\\bFALSE\\b"
+        }
+      ]
+    }
+  }
+}
