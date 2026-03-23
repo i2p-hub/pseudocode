@@ -28,6 +28,9 @@
       "include": "#delimiters"
     },
     {
+      "include": "#fallback-keywords"
+    },
+    {
       "include": "#identifiers"
     }
   ],
@@ -85,7 +88,23 @@
           "include": "#delimiters"
         },
         {
+          "include": "#fallback-keywords"
+        },
+        {
           "include": "#identifiers"
+        }
+      ]
+    },
+
+    "fallback-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control",
+          "match": "\\b(?:START|END|GET|PUT|LET|CALL|IF|ELSEIF|ELSE|ENDIF|WHILE|DO|ENDWHILE|FOR|FOREACH|ENDFOR|FROM|TO|STEP|IN)\\b"
+        },
+        {
+          "name": "keyword.operator.logical",
+          "match": "\\b(?:AND|OR|NOT)\\b"
         }
       ]
     },
