@@ -4,6 +4,14 @@ A syntax highlighter for I2P Pseudocode
 
 ## Instal in VS Code (Install from VSIX) 
 
+### CLI
+
+Run the following command to install the current version of the extension
+
+```bash
+code --install-extension
+```
+
 
 ## Acknowledgements
 
