@@ -64,6 +64,9 @@
     "expression-patterns": {
       "patterns": [
         {
+          "include": "#comments"
+        },
+        {
           "include": "#strings"
         },
         {
@@ -91,25 +94,31 @@
       "patterns": [
         {
           "name": "meta.program.start.pseudocode",
-          "match": "^\\s*(START)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*$",
+          "match": "^\\s*(START)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
             },
             "2": {
               "name": "entity.name.function"
+            },
+            "3": {
+              "name": "comment.line.number-sign"
             }
           }
         },
         {
           "name": "meta.program.end.pseudocode",
-          "match": "^\\s*(END)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*$",
+          "match": "^\\s*(END)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
             },
             "2": {
               "name": "entity.name.function"
+            },
+            "3": {
+              "name": "comment.line.number-sign"
             }
           }
         }
@@ -118,6 +127,28 @@
 
     "input-statements": {
       "patterns": [
+        {
+          "name": "meta.input.statement.pseudocode",
+          "begin": "^\\s*(GET)\\s+([A-Z][A-Za-z0-9]*(?:_[A-Z][A-Za-z0-9]*)+)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "constant.other"
+            }
+          },
+          "end": "(?=#|$)",
+          "patterns": [
+            {
+              "match": "\\bFROM\\b",
+              "name": "keyword.control"
+            },
+            {
+              "include": "#expression-patterns"
+            }
+          ]
+        },
         {
           "name": "meta.input.statement.pseudocode",
           "begin": "^\\s*(GET)\\s+([A-Za-z_][A-Za-z0-9_]*)",
@@ -129,15 +160,11 @@
               "name": "variable.other"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "patterns": [
             {
-              "match": "\\b(FROM)\\b",
-              "captures": {
-                "1": {
-                  "name": "keyword.control"
-                }
-              }
+              "match": "\\bFROM\\b",
+              "name": "keyword.control"
             },
             {
               "include": "#expression-patterns"
@@ -157,16 +184,12 @@
               "name": "keyword.control"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "contentName": "meta.output.expression.pseudocode",
           "patterns": [
             {
-              "match": "\\b(TO)\\b",
-              "captures": {
-                "1": {
-                  "name": "keyword.control"
-                }
-              }
+              "match": "\\bTO\\b",
+              "name": "keyword.control"
             },
             {
               "include": "#expression-patterns"
@@ -178,6 +201,28 @@
 
     "assignment-statements": {
       "patterns": [
+        {
+          "name": "meta.assignment.statement.pseudocode",
+          "begin": "^\\s*(LET)\\s+([A-Z][A-Za-z0-9]*(?:_[A-Z][A-Za-z0-9]*)+)\\s*(=)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "constant.other"
+            },
+            "3": {
+              "name": "keyword.operator"
+            }
+          },
+          "end": "(?=#|$)",
+          "contentName": "meta.assignment.expression.pseudocode",
+          "patterns": [
+            {
+              "include": "#expression-patterns"
+            }
+          ]
+        },
         {
           "name": "meta.assignment.statement.pseudocode",
           "begin": "^\\s*(LET)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(=)",
@@ -192,7 +237,7 @@
               "name": "keyword.operator"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "contentName": "meta.assignment.expression.pseudocode",
           "patterns": [
             {
@@ -219,7 +264,7 @@
               "name": "punctuation.section.group.begin"
             }
           },
-          "end": "(\\))\\s*$",
+          "end": "(\\))(?=\\s*(#|$))",
           "endCaptures": {
             "1": {
               "name": "punctuation.section.group.end"
@@ -227,8 +272,7 @@
           },
           "patterns": [
             {
-              "name": "punctuation.separator"
-            ,
+              "name": "punctuation.separator",
               "match": ","
             },
             {
@@ -238,13 +282,16 @@
         },
         {
           "name": "meta.call.statement.noargs.pseudocode",
-          "match": "^\\s*(CALL)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*$",
+          "match": "^\\s*(CALL)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
             },
             "2": {
               "name": "entity.name.function"
+            },
+            "3": {
+              "name": "comment.line.number-sign"
             }
           }
         }
@@ -261,7 +308,7 @@
               "name": "keyword.control"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "contentName": "meta.condition.expression.pseudocode",
           "patterns": [
             {
@@ -277,7 +324,7 @@
               "name": "keyword.control"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "contentName": "meta.condition.expression.pseudocode",
           "patterns": [
             {
@@ -287,19 +334,25 @@
         },
         {
           "name": "meta.conditional.else.pseudocode",
-          "match": "^\\s*(ELSE)\\s*$",
+          "match": "^\\s*(ELSE)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
+            },
+            "2": {
+              "name": "comment.line.number-sign"
             }
           }
         },
         {
           "name": "meta.conditional.endif.pseudocode",
-          "match": "^\\s*(ENDIF)\\s*$",
+          "match": "^\\s*(ENDIF)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
+            },
+            "2": {
+              "name": "comment.line.number-sign"
             }
           }
         }
@@ -316,15 +369,11 @@
               "name": "keyword.control"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "patterns": [
             {
-              "match": "\\b(DO)\\b",
-              "captures": {
-                "1": {
-                  "name": "keyword.control"
-                }
-              }
+              "match": "\\bDO\\b",
+              "name": "keyword.control"
             },
             {
               "include": "#expression-patterns"
@@ -342,7 +391,7 @@
               "name": "keyword.control"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "contentName": "meta.condition.expression.pseudocode",
           "patterns": [
             {
@@ -352,21 +401,52 @@
         },
         {
           "name": "meta.loop.do.pseudocode",
-          "match": "^\\s*(DO)\\s*$",
+          "match": "^\\s*(DO)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
+            },
+            "2": {
+              "name": "comment.line.number-sign"
             }
           }
         },
         {
           "name": "meta.loop.endwhile.pseudocode",
-          "match": "^\\s*(ENDWHILE)\\s*$",
+          "match": "^\\s*(ENDWHILE)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
+            },
+            "2": {
+              "name": "comment.line.number-sign"
             }
           }
+        },
+        {
+          "name": "meta.loop.for.pseudocode",
+          "begin": "^\\s*(FOR)\\s+([A-Z][A-Za-z0-9]*(?:_[A-Z][A-Za-z0-9]*)+)\\s*(=)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "constant.other"
+            },
+            "3": {
+              "name": "keyword.operator"
+            }
+          },
+          "end": "(?=#|$)",
+          "patterns": [
+            {
+              "match": "\\b(?:TO|STEP)\\b",
+              "name": "keyword.control"
+            },
+            {
+              "include": "#expression-patterns"
+            }
+          ]
         },
         {
           "name": "meta.loop.for.pseudocode",
@@ -382,16 +462,34 @@
               "name": "keyword.operator"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "patterns": [
             {
-              "match": "\\b(TO|STEP)\\b",
-              "captures": {
-                "1": {
-                  "name": "keyword.control"
-                }
-              }
+              "match": "\\b(?:TO|STEP)\\b",
+              "name": "keyword.control"
             },
+            {
+              "include": "#expression-patterns"
+            }
+          ]
+        },
+        {
+          "name": "meta.loop.foreach.pseudocode",
+          "begin": "^\\s*(FOREACH)\\s+([A-Z][A-Za-z0-9]*(?:_[A-Z][A-Za-z0-9]*)+)\\s+(IN)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control"
+            },
+            "2": {
+              "name": "constant.other"
+            },
+            "3": {
+              "name": "keyword.control"
+            }
+          },
+          "end": "(?=#|$)",
+          "contentName": "meta.loop.collection.pseudocode",
+          "patterns": [
             {
               "include": "#expression-patterns"
             }
@@ -411,7 +509,7 @@
               "name": "keyword.control"
             }
           },
-          "end": "\\s*$",
+          "end": "(?=#|$)",
           "contentName": "meta.loop.collection.pseudocode",
           "patterns": [
             {
@@ -421,10 +519,13 @@
         },
         {
           "name": "meta.loop.endfor.pseudocode",
-          "match": "^\\s*(ENDFOR)\\s*$",
+          "match": "^\\s*(ENDFOR)\\s*(#.*)?$",
           "captures": {
             "1": {
               "name": "keyword.control"
+            },
+            "2": {
+              "name": "comment.line.number-sign"
             }
           }
         }
@@ -452,38 +553,60 @@
       "patterns": [
         {
           "name": "comment.line.number-sign",
-          "begin": "(^[ \\t]+)?(#)",
+          "begin": "#",
           "beginCaptures": {
-            "1": {
-              "name": "punctuation.whitespace.comment.leading"
-            },
-            "2": {
+            "0": {
               "name": "punctuation.definition.comment"
             }
           },
-          "end": "(?=$)"
+          "end": "$"
         }
       ]
     },
 
     "strings": {
-      "name": "string.quoted.double",
-      "begin": "\"",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.definition.string.begin"
-        }
-      },
-      "end": "\"",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.string.end"
-        }
-      },
       "patterns": [
         {
-          "name": "constant.character.escape",
-          "match": "\\\\."
+          "name": "string.quoted.multi.pseudocode",
+          "begin": "\"\"\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin"
+            }
+          },
+          "end": "\"\"\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.double",
+          "begin": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin"
+            }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end"
+            }
+          },
+          "patterns": [
+            {
+              "name": "constant.character.escape",
+              "match": "\\\\."
+            }
+          ]
         }
       ]
     },
@@ -565,6 +688,10 @@
 
     "identifiers": {
       "patterns": [
+        {
+          "name": "constant.other",
+          "match": "\\b[A-Z][A-Za-z0-9]*(?:_[A-Z][A-Za-z0-9]*)+\\b"
+        },
         {
           "name": "variable.other",
           "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
