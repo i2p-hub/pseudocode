@@ -637,13 +637,13 @@
           "begin": "<(?=[A-Za-z_])",
           "beginCaptures": {
             "0": {
-              "name": "punctuation.section.placeholder.begin"
+              "name": "punctuation.section.group.begin"
             }
           },
           "end": ">",
           "endCaptures": {
             "0": {
-              "name": "punctuation.section.placeholder.end"
+              "name": "punctuation.section.group.end"
             }
           },
           "patterns": [
