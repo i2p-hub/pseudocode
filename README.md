@@ -2,6 +2,9 @@
 A syntax highlighter for I2P Pseudocode
 
 
+## Instal in VS Code (Install from VSIX) 
+
+
 ## Acknowledgements
 
 - [Martin Ring's TextMate grammar definitions ](https://raw.githubusercontent.com/martinring/tmlanguage/refs/heads/master/tmlanguage.json)
